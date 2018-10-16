@@ -27,6 +27,8 @@ HAVING d.department_name in ('IT'，'Sales');
 ```
 第一个查询语句得到的优化指导结果：
 ![image](https://github.com/Landy7/Oracle/blob/master/%E5%AE%9E%E9%AA%8C111111111111.png)
+系统所给的建议：
+
 
 第二个查询语句得到的优化指导结果：
 ![image](https://github.com/Landy7/Oracle/blob/master/%E5%AE%9E%E9%AA%8C1-222.png)
