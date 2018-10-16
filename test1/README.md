@@ -46,7 +46,7 @@ SELECT e.employee_id, e.first_name, e.manager_id,
 (SELECT  m.first_name  from  employee m  WHERE  m.employee_id=e.manager_id)
 AS manager name FROM hr.employee e ORDER BY e.employee_id;
 ```
-### 所得到的结果是cost=21，consistent gets=45,则表明它不是最有效的语句，因为有嵌套语句，每输出employee的一行都要再次查询一次，所以时间花的更多。
+ 所得到的结果是cost=21，consistent gets=45,则表明它不是最有效的语句，因为有嵌套语句，每输出employee的一行都要再次查询一次，所以时间花的更多。
 ### 更好的方法是由多表外连接方式查询。
 
 优化得到的查询语句：
@@ -55,7 +55,16 @@ SELECT e.employee_id, e.first_name, e.manager_id, m.first_name
 AS manager_name FROM employee e, employee m WHERE
 e.manager_id=m.employee_id(+)ORDER BY e.employee_id;
 ```
-### 结果为cost=6,consistent gets=15，比第一条查询语句的效率高得多，则表明该语句进行了优化。
+结果为cost=6,consistent gets=15，比第一条查询语句的效率高得多，则表明该语句进行了优化。
+
+## 自定义查询语句：
+```SQL
+SELECT concat(first_name,last_name) "员工姓名",salary + salary*commission_pct AS Wage 
+FROM employees WHERE salary + salary*commission_pct 
+NOT BETWEEN 1000 AND 1500 ORDER BY Wage DESC;
+```
+
+
 
 
 
