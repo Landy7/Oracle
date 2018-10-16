@@ -28,3 +28,5 @@ HAVING d.department_name in ('IT'，'Sales');
 第一个查询得到的优化指导结果：
 
 
+
+
