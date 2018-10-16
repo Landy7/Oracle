@@ -58,12 +58,13 @@ e.manager_id=m.employee_id(+)ORDER BY e.employee_id;
 结果为cost=6,consistent gets=15，比第一条查询语句的效率高得多，则表明该语句进行了优化。
 
 ## 自定义查询语句：
+
+显示工资不在1000 到1500 之间的员工信息：名字、工资，按工资从大到小排序
 ```SQL
 SELECT concat(first_name,last_name) "员工姓名",salary + salary*commission_pct AS Wage 
 FROM employees WHERE salary + salary*commission_pct 
 NOT BETWEEN 1000 AND 1500 ORDER BY Wage DESC;
 ```
-
 
 
 
