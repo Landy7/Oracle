@@ -27,17 +27,35 @@ HAVING d.department_name in ('IT'，'Sales');
 ```
 第一个查询语句得到的优化指导结果：
 ![image](https://github.com/Landy7/Oracle/blob/master/%E5%AE%9E%E9%AA%8C111111111111.png)
-系统所给的建议：
-
+##### 系统所给的建议：
+![image](https://github.com/Landy7/Oracle/blob/master/%E5%AE%9E%E9%AA%8C%E4%B8%80.png)
 
 第二个查询语句得到的优化指导结果：
 ![image](https://github.com/Landy7/Oracle/blob/master/%E5%AE%9E%E9%AA%8C1-222.png)
+##### 第二个查询语句系统没有给建议。
 
 虽然cost不是唯一影响执行时间的因素，但是由于这个地方缺少了consistent gets的参考，所以只能由cost来对比得出结论。
-所以，从cost方面对比得到：第一条查询语句比第二条查询语句多了两个步骤，所花的时间总体比第二个查询语句少。
+所以，从cost方面对比得到：第一条查询语句比第二条查询语句多了两个步骤，所花的cost总体比第二个查询语句少。
 ## 第一条优于第二条。
 
+## 分析教材中的文档
 
+查询1：
+```SQL
+SELECT e.employee_id, e.first_name, e.manager_id,
+(SELECT  m.first_name  from  employee m  WHERE  m.employee_id=e.manager_id)
+AS manager name FROM hr.employee e ORDER BY e.employee_id;
+```
+### 所得到的结果是cost=21，consistent gets=45,则表明它不是最有效的语句，因为有嵌套语句，每输出employee的一行都要再次查询一次，所以时间花的更多。
+### 更好的方法是由多表外连接方式查询。
+
+优化得到的查询语句：
+```SQL
+SELECT e.employee_id, e.first_name, e.manager_id, m.first_name
+AS manager_name FROM employee e, employee m WHERE
+e.manager_id=m.employee_id(+)ORDER BY e.employee_id;
+```
+### 结果为cost=6,consistent gets=15，比第一条查询语句的效率高得多，则表明该语句进行了优化。
 
 
 
